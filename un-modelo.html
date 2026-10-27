@@ -182,16 +182,17 @@
   
 
   /* =====================================================================
-     FICHA DE PROYECTO · 2026 — estructura del Figma «Inspiración/Ficha»
-     con la visual Rols 2026.
-     1. Hero: título + datos centrados, foto protagonista + chip de muestra
-     2. Galería de fotos        3. Texto del proyecto
-     4. Alfombras: fila de muestras (textura) + precio + «Añadir muestra»
-     5. Proyecto anterior / siguiente
-     6. Banda B Corp (antes del footer)
+     FICHA DE PROYECTO · 2026 (v6, proporciones de la referencia)
+     Medidas tomadas de la referencia a 1440 px:
+     título 24px · subtítulo 20px · tira de fotos 670px de alto con 30px de hueco
+     datos|texto 490/675 a 16px/26px · "Alfombras en este proyecto" 40px centrado
+     fichas de producto 3 por fila con 10px de hueco · otros proyectos 2 a sangre
+     banda final 445px con foto clara y texto centrado
      ===================================================================== */
-  :root{ --rfoto:16px; --ink:#333a3c; }
-  main{ padding-top:var(--cabecera); overflow-x:clip; }   /* contiene la banda full-bleed sin scroll horizontal */
+  :root{ --rfoto:16px; --ink:#333a3c; --pad:20px; }
+  @media (min-width:768px){ :root{ --pad:40px; } }
+  @media (min-width:1024px){ :root{ --pad:64px; } }
+  main{ padding-top:var(--cabecera); }
   figure{ margin:0; }
   .chev{ width:12px; height:12px; flex:none; }
 
@@ -199,122 +200,123 @@
   .rv.in{ opacity:1; transform:none; }
   @media (prefers-reduced-motion:reduce){ .rv{ opacity:1; transform:none; } }
 
-  /* ---------- 1. hero ---------- */
-  .fhero{ padding-block:30px 0; text-align:center; }
-  /* título: mismo tamaño que el H1 de /interioristas/ (46px desktop, 32px móvil) */
-  .fhero h1{ font-family:var(--display); font-weight:300; font-size:clamp(2rem, 1.7rem + 1.3vw, 2.875rem); line-height:1.05; letter-spacing:-.02em; }
-  /* datos: mismo tamaño que el párrafo de /interioristas/ (13.5px / 1.8) */
-  .fhero .fmeta{ margin-top:14px; font-size:13.5px; font-weight:300; line-height:1.8; letter-spacing:normal; text-transform:none; color:var(--muted); }
-  .fhero-img{ position:relative; margin-top:30px; overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); }
-  .fhero-img > img{ width:100%; height:min(56svh,520px); object-fit:cover; object-position:center 82%; display:block; cursor:zoom-in; }
-  @media (min-width:900px){
-    .fhero{ padding-block:40px 0; min-height:calc(100svh - var(--cabecera)); display:flex; flex-direction:column; }
-    .fhero-img{ margin-top:34px; flex:1 1 0; min-height:0; }   /* la foto rellena el resto exacto, sin hueco */
-    .fhero-img > img{ height:100%; }
+  /* ---------- 1. título + subtítulo centrados ---------- */
+  .hhead{ text-align:center; padding-block:26px 0; display:flex; flex-direction:column; align-items:center; gap:14px; }
+  /* mismos estilos que el resto de la web 2026: h1 League Spartan light, subtítulo = .lead */
+  .hhead h1{ font-size:clamp(1.65rem,2.9vw,2.4rem); font-weight:300; line-height:1.07; letter-spacing:-.018em; max-width:40ch; }
+  .hhead .sub{ font-size:15px; line-height:1.8; font-weight:300; color:var(--muted); max-width:60ch; }
+  @media (min-width:768px){ .hhead{ padding-top:32px; gap:16px; } }
+
+  /* ---------- 2. tira horizontal de fotos (como la referencia) ---------- */
+  .strip-wrap{ position:relative; margin-top:16px; }
+  @media (min-width:768px){ .strip-wrap{ margin-top:24px; } }
+  .strip{
+    --alto:calc(100svh - var(--cabecera) - 48px);
+    display:flex; gap:14px; overflow-x:auto; scroll-snap-type:x mandatory; scroll-padding-inline:var(--pad);
+    padding-inline:var(--pad); scrollbar-width:none; cursor:grab; -webkit-overflow-scrolling:touch;
   }
-  /* chip de muestra flotante */
-  .fchip{ position:absolute; top:16px; right:16px; z-index:2; display:flex; align-items:center; gap:12px; background:rgba(255,255,255,.95); border-radius:12px; padding:9px 14px 9px 9px; text-decoration:none; color:inherit; box-shadow:0 2px 14px rgba(40,44,45,.10); transition:background-color .3s ease; }
-  .fchip.tl{ top:16px; left:16px; right:auto; }
-  .fchip.bl{ top:auto; bottom:16px; left:16px; right:auto; }
-  .fchip.br{ top:auto; bottom:16px; right:16px; left:auto; }
-  .fchip:hover{ background:#fff; }
-  .fchip .thumb{ width:48px; height:48px; border-radius:9px; flex:none; background:var(--surface-deep) center/cover no-repeat; }
-  .fchip .t{ display:flex; flex-direction:column; gap:3px; text-align:left; }
-  .fchip .k{ font-size:9px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--soft); }
-  .fchip .n{ font-family:var(--display); font-size:14px; line-height:1.1; }
-  @media (max-width:560px){ .fchip .t{ display:none; } .fchip{ padding:8px; } }
-
-  /* ---------- 2. galería ---------- */
-  .fgal{ padding-block:0; display:grid; gap:14px; }
-  @media (min-width:768px){ .fgal{ gap:24px; } }
-  .fgal .pair{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
-  @media (min-width:768px){ .fgal .pair{ gap:24px; } }
-  .fgal figure{ overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); }
-  .fgal img{ width:100%; object-fit:cover; display:block; cursor:zoom-in; transition:transform 1s ease; }
-  .fgal figure:hover img{ transform:scale(1.025); }
-  .fgal .full img{ aspect-ratio:16/10; }
-  .fgal .pair img{ aspect-ratio:4/5; }
-  /* pareja asimetrica: foto horizontal (mas ancha) + foto vertical, misma altura */
-  .fgal .pair.split{ grid-template-columns:calc(62% - 7px) calc(38% - 7px); align-items:stretch; }
-  .fgal .pair.split img{ aspect-ratio:auto; height:100%; }
-  .fgal .pair.split figure:first-child{ aspect-ratio:4/3; }                       /* horizontal mas ancha y mas alta */
-  .fgal .pair.split figure:first-child img{ object-position:center 80%; }          /* 006: deja ver la alfombra (abajo-centro) */
-  .fgal .pair.split figure:last-child{ position:relative; }                       /* la vertical se estira a esa altura */
-  .fgal .pair.split figure:last-child img{ position:absolute; inset:0; object-position:30% bottom; }  /* 001: alfombra (abajo-izquierda) */
-
-  /* ---------- 3. texto del proyecto ---------- */
-  /* mismo aire arriba y abajo del texto */
-  .ftext{ padding-block:52px; }
-  @media (min-width:900px){ .ftext{ padding-block:72px; } }
-  .ftext .in{ max-width:640px; margin-inline:auto; text-align:center; }
-  .ftext .eyebrow{ margin-bottom:18px; }
-  .ftext .body{ font-size:13.5px; line-height:1.8; font-weight:300; color:var(--muted); max-width:none; }
-  .ftext .body b{ font-weight:500; color:var(--fg); }
-  .ftext .body + .body{ margin-top:16px; }
-
-  /* ---------- texto a la izquierda, al margen de la imagen (tras la pareja) ---------- */
-  .fnote{ padding-block:40px 48px; }
-  @media (min-width:900px){ .fnote{ padding-block:56px 60px; } }
-  .fnote p{ margin:0; max-width:720px; font-size:13.5px; line-height:1.8; font-weight:300; color:var(--muted); }
-  .fnote p b{ font-weight:500; color:var(--fg); }
-
-  /* ---------- bloque editorial: foto ancha + banda calida + cuadrada con texto ---------- */
-  .feature{ padding-block:0; position:relative; z-index:0; }
-  .feature .feat-wide{ position:relative; z-index:1; overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); }
-  .feature .feat-wide img{ width:100%; aspect-ratio:16/10; object-fit:cover; object-position:center 60%; display:block; cursor:zoom-in; }
-  /* la banda calida sube media foto ancha (empieza a su mitad) y empuja el contenido debajo */
-  .feature .feat-warm{ position:relative; z-index:0; margin-top:-31.25%; padding-top:calc(31.25% + 48px); margin-bottom:19%; }
-  .feature .feat-warm::before{ content:''; position:absolute; top:0; bottom:0; left:calc((100% - 100vw)/2); width:100vw; background:var(--surface-warm); z-index:-1; }  /* fondo calido de borde a borde */
-  .feature .feat-row{ display:grid; grid-template-columns:0.82fr 1fr; gap:48px; align-items:center; }
-  .feature .feat-sq{ position:relative; overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); margin-bottom:-43%; }  /* la banda termina pasada la mitad de la cuadrada */
-  .feature .feat-sq img{ width:100%; aspect-ratio:1/1; object-fit:cover; object-position:center 72%; display:block; cursor:zoom-in; }
-  .feature .feat-txt p{ margin:0; max-width:620px; font-size:13.5px; line-height:1.8; font-weight:300; color:var(--muted); }
-  .feature .feat-txt p b{ font-weight:500; color:var(--fg); }
-  @media (max-width:768px){
-    .feature .feat-warm{ margin-top:0; padding-top:40px; padding-bottom:40px; margin-bottom:0; }
-    .feature .feat-row{ grid-template-columns:1fr; gap:24px; }
-    .feature .feat-sq{ margin-bottom:0; }
-    .feature .feat-txt p{ max-width:none; }
+  .strip.drag{ cursor:grabbing; }
+  @media (hover:hover) and (pointer:fine){ .strip{ scroll-snap-type:none; } }
+  .strip figure{ user-select:none; }
+  .strip::-webkit-scrollbar{ display:none; }
+  .strip figure{ flex:none; scroll-snap-align:start; }
+  .strip img{
+    width:calc(100vw - 40px); height:min(calc(100svh - var(--cabecera) - 40px), 560px); max-width:none; object-fit:cover;
+    border-radius:var(--rfoto); background:var(--surface-deep); display:block; user-select:none; -webkit-user-drag:none;
   }
-
-  /* ---------- 4. alfombras: fila de muestras ---------- */
-  .frugs{ padding-block:56px 0; }
-  @media (min-width:900px){ .frugs{ padding-block:80px 0; } }
-  .frugs .ruleHead{ margin-bottom:30px; }
-  @media (min-width:900px){ .frugs .ruleHead{ margin-bottom:40px; } }
-  .fswatches{ list-style:none; margin:0; padding:0; display:grid; gap:28px 20px; grid-template-columns:repeat(2,minmax(0,1fr)); }
-  @media (min-width:600px){ .fswatches{ grid-template-columns:repeat(auto-fill, 300px); justify-content:start; gap:40px 32px; } }
-  .fsw{ display:block; text-decoration:none; color:inherit; }
-  .fsw .im{ display:block; aspect-ratio:1/1; overflow:hidden; border-radius:var(--rfoto); background:#fff; }
-  .fsw .im img{ width:100%; height:100%; object-fit:cover; transition:transform 1s ease; }
-  .fsw:hover .im img{ transform:scale(1.05); }
-  .fsw .nm{ display:block; margin-top:16px; font-family:var(--display); font-size:16px; font-weight:400; letter-spacing:.01em; }
-  .fsw .col{ display:block; margin-top:4px; font-size:11px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--soft); }
-  .fsw .pr{ display:block; margin-top:8px; font-size:13px; }
-  .fsw .add{ display:inline-flex; align-items:center; gap:8px; margin-top:12px; font-size:10px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; border-bottom:1px solid var(--line-strong); padding-bottom:6px; transition:gap .3s ease, border-color .3s ease; }
-  .fsw:hover .add{ gap:14px; border-color:var(--fg); }
-
-  /* ---------- mas proyectos: anterior / siguiente (miniatura) ---------- */
-  .fprojnav{ padding-block:56px 0; }
-  @media (min-width:900px){ .fprojnav{ padding-block:80px 0; } }
-  .fpn-grid{ display:grid; grid-template-columns:1fr; gap:14px; border-top:1px solid var(--line); }
-  @media (min-width:768px){ .fpn-grid{ grid-template-columns:1fr 1fr; gap:0; } }
-  .fpn{ display:flex; align-items:center; gap:18px; padding:26px 0; text-decoration:none; color:inherit; }
   @media (min-width:768px){
-    .fpn{ padding:30px 0; }
-    .fpn.next{ flex-direction:row-reverse; text-align:right; padding-left:40px; border-left:1px solid var(--line); margin-left:40px; }
-    .fpn.prev{ padding-right:40px; }
+    .strip{ gap:30px; }
+    .strip img{ width:auto; aspect-ratio:4/5; height:clamp(420px, var(--alto), 1000px); }
   }
-  .fpn .th{ width:72px; height:84px; border-radius:10px; object-fit:cover; flex:none; background:var(--surface-deep); }
-  .fpn .txt{ min-width:0; display:flex; flex-direction:column; gap:5px; }
-  .fpn .k{ display:inline-flex; align-items:center; gap:8px; font-size:9.5px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--soft); }
-  .fpn.next .k{ flex-direction:row-reverse; }
-  .fpn .k svg{ width:12px; height:12px; }
-  .fpn .nm{ font-family:var(--display); font-size:17px; font-weight:400; line-height:1.2; }
-  .fpn .sub{ font-size:12px; color:var(--muted); }
-  .fpn:hover .nm{ text-decoration:underline; text-underline-offset:3px; }
+  .sbtn{
+    position:absolute; top:50%; transform:translateY(-50%); z-index:2;
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--line-strong); background:rgba(255,255,255,.92);
+    color:var(--fg); cursor:pointer; display:none; place-items:center; transition:background-color .3s ease, border-color .3s ease;
+  }
+  .sbtn:hover{ background:#fff; border-color:var(--fg); }
+  .sbtn svg{ width:16px; height:16px; }
+  .sbtn.prev{ left:calc(var(--pad) - 22px); } .sbtn.next{ right:calc(var(--pad) - 22px); }
+  @media (min-width:768px){ .sbtn{ display:grid; } }
+  .sbtn[disabled]{ opacity:0; pointer-events:none; }
 
-  /* ---------- 6. banda B Corp ---------- */
+  /* ---------- 3. datos | texto (dos columnas, texto alineado arriba) ---------- */
+  .datos{ display:grid; gap:28px; padding-block:56px 0; }
+  .datos h1{ margin:0 0 26px; font-family:var(--display); font-size:clamp(1.65rem,2.9vw,2.4rem); font-weight:300; line-height:1.07; letter-spacing:-.018em; }
+  .datos p{ font-size:13.5px; line-height:1.8; font-weight:300; color:var(--muted); }
+  .datos .lista p + p{ margin-top:10px; }
+  .datos .lista b{ font-weight:500; color:var(--fg); }
+  .datos .lista a{ color:var(--fg); text-decoration:none; border-bottom:1px solid var(--line-strong); padding-bottom:1px; transition:border-color .3s ease; }
+  .datos .lista a:hover{ border-color:var(--fg); }
+  .datos .lista .ig{ display:inline-flex; align-items:center; gap:5px; margin-left:8px; font-size:12px; color:var(--soft); border:0; }
+  .datos .lista .ig svg{ width:13px; height:13px; }
+  .datos .texto p + p{ margin-top:16px; }
+  @media (min-width:900px){
+    .datos{ grid-template-columns:490fr 675fr; column-gap:60px; padding-block:80px 0; align-items:start; }
+    .datos h1{ margin-bottom:30px; }
+  }
+
+  /* ---------- 4. alfombras en este proyecto (slider editorial) ---------- */
+  .rugs-sec{ padding-block:56px 0; }
+  @media (min-width:900px){ .rugs-sec{ padding-block:80px 0; } }
+  .rslider{ margin-top:32px; }
+  @media (min-width:900px){ .rslider{ margin-top:44px; } }
+  .rviewport{ overflow:hidden; }
+  .rtrack{ display:flex; list-style:none; margin:0; padding:0; transition:transform .6s cubic-bezier(.4,0,.2,1); }
+  .rtrack.drag{ transition:none; }
+  .rslide{ flex:0 0 100%; min-width:0; }
+  .rslide .sin{ display:grid; gap:24px; align-items:center; }
+  .ramb{ overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); }
+  .ramb img{ width:100%; aspect-ratio:3/2; object-fit:cover; object-position:center 94%; display:block; user-select:none; -webkit-user-drag:none; }
+  /* panel derecho */
+  .rinfo{ display:flex; flex-direction:column; }
+  .rinfo .rtop{ display:flex; align-items:flex-start; justify-content:space-between; gap:24px; }
+  .rinfo .rtop .hd{ min-width:0; }
+  .rinfo .w{ font-size:10.5px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--soft); }
+  .rinfo h3{ margin-top:12px; font-family:var(--display); font-weight:300; font-size:clamp(1.6rem,2.6vw,2.2rem); letter-spacing:-.015em; line-height:1.07; }
+  .rinfo .sw{ flex:none; width:94px; height:94px; border-radius:12px; object-fit:cover; background:var(--surface-deep); }
+  .rinfo .desc{ margin-top:18px; font-size:13.5px; line-height:1.8; color:var(--muted); max-width:42ch; }
+  .rspecs{ list-style:none; margin:22px 0 0; padding:20px 0 0; border-top:1px solid var(--line); display:flex; flex-wrap:wrap; gap:16px 40px; }
+  .rspecs .k{ display:block; font-size:9.5px; font-weight:500; letter-spacing:.16em; text-transform:uppercase; color:var(--soft); }
+  .rspecs .v{ display:block; margin-top:6px; font-family:var(--display); font-size:17px; font-weight:400; }
+  .rfoot{ margin-top:24px; display:flex; flex-wrap:wrap; align-items:center; gap:14px 28px; }
+  .rfoot .pr{ font-size:15px; font-weight:700; }
+  @media (min-width:900px){
+    .rslide .sin{ grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr); gap:64px; }
+    .ramb img{ aspect-ratio:4/3; }
+    .rinfo{ padding-right:4%; }
+  }
+  /* navegacion */
+  .rnav{ display:flex; align-items:center; justify-content:space-between; gap:20px; margin-top:28px; }
+  .rcount{ font-size:11px; font-weight:500; letter-spacing:.14em; color:var(--soft); }
+  .rcount b{ color:var(--fg); font-weight:500; }
+  .rbtns{ display:flex; gap:10px; }
+  .rbtns button{ width:46px; height:46px; border-radius:50%; border:1px solid var(--line-strong); background:var(--bg); color:var(--fg); cursor:pointer; display:grid; place-items:center; transition:background-color .3s ease, border-color .3s ease, opacity .3s ease; }
+  .rbtns button:hover{ background:var(--surface); border-color:var(--fg); }
+  .rbtns button[disabled]{ opacity:.35; cursor:default; }
+  .rbtns svg{ width:16px; height:16px; }
+  .rslider.solo .rnav{ display:none; }
+
+  /* ---------- 5. otros proyectos (tarjetas con foto redondeada, como el resto) ---------- */
+  .more{ padding-block:56px 0; }
+  @media (min-width:900px){ .more{ padding-block:80px 0; } }
+  .more .ruleHead{ margin-bottom:28px; }
+  .mgrid{ list-style:none; margin:30px 0 0; padding:0; display:grid; gap:14px; grid-template-columns:repeat(3,minmax(0,1fr)); }
+  @media (min-width:768px){ .mgrid{ gap:24px; margin-top:40px; } }
+  .mcard{ display:block; text-decoration:none; color:inherit; }
+  .mcard .mimg{ display:block; aspect-ratio:4/5; overflow:hidden; border-radius:var(--rfoto); background:var(--surface-deep); }
+  .mcard .mimg img{ width:100%; height:100%; object-fit:cover; transition:transform .9s ease; }
+  .mcard:hover .mimg img{ transform:scale(1.04); }
+  .mcard .k{ display:block; margin-top:16px; font-size:9px; font-weight:500; letter-spacing:.18em; text-transform:uppercase; color:var(--soft); }
+  .mcard .nm{ display:block; margin-top:7px; font-family:var(--display); font-size:17px; font-weight:400; letter-spacing:.01em; line-height:1.25; }
+  .mcard .sub{ display:block; margin-top:4px; font-size:12.5px; color:var(--muted); line-height:1.45; }
+  @media (max-width:640px){
+    .mgrid{ grid-template-columns:1fr 1fr; }
+    .mgrid li:nth-child(3){ display:none; }
+    .mcard .nm{ font-size:15px; }
+  }
+  .more-foot{ margin-top:36px; }
+
+  /* ---------- 6. banda B Corp (antes del footer) ---------- */
   .bcorp-band{ background:var(--surface-warm); margin-top:72px; }
   @media (min-width:900px){ .bcorp-band{ margin-top:96px; } }
   .bcorp-band .inner{ padding-block:40px; display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:24px 40px; }
@@ -409,89 +411,111 @@
 
 <main id="contenido">
 
-  <!-- ===================== 1. HERO ===================== -->
-  <section class="wrap fhero rv">
-    <h1>Natalia Marchal Interiorismo</h1>
-    <p class="fmeta">Residencial · Tolosa, Guipúzcoa · 2026</p>
-    <figure class="fhero-img">
-      <img src="img/natalia-marchal-005.webp" width="1076" height="1334" alt="Salón del piso en Tolosa con la alfombra Lyra Coconut Oat de Rols bajo el sofá y la butaca" data-lb="0" fetchpriority="high">
-      <a class="fchip" href="https://www.rolscarpets.com/producto/lyra-alfombra-coconut-oat/">
-        <span class="thumb" style="background-image:url(img/lyra-coconut-oat-tex.webp)"></span>
-        <span class="t"><span class="k">En el salón</span><span class="n">Lyra Coconut Oat</span></span>
-      </a>
-    </figure>
-  </section>
+  <!-- ===================== 1. TIRA DE FOTOS (desliza, como la referencia) ===================== -->
+  <div class="strip-wrap">
+    <button class="sbtn prev" type="button" data-sprev aria-label="Foto anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg></button>
+    <div class="strip" id="strip">
+      <figure><img src="img/natalia-marchal-005.webp" width="1076" height="1334" alt="Salón del piso en Tolosa con la alfombra Lyra Coconut Oat de Rols bajo el sofá y la butaca" data-lb="0" fetchpriority="high"></figure>
+      <figure><img src="img/natalia-marchal-001.webp" width="1076" height="1334" alt="Habitación infantil con escritorio bajo la ventana y la alfombra redonda Terra Kalahari Oat Sea de Rols" data-lb="1"></figure>
+      <figure><img src="img/natalia-marchal-007.webp" width="1076" height="1334" alt="Vista del salón desde el comedor, con la alfombra Lyra Coconut Oat de Rols bajo la zona de estar" data-lb="2"></figure>
+      <figure><img src="img/natalia-marchal-003.webp" width="1076" height="1334" loading="lazy" alt="Dormitorio en tonos tierra con la alfombra Aral 03 de Rols a los pies de la cama" data-lb="3"></figure>
+      <figure><img src="img/natalia-marchal-006.webp" width="1076" height="1334" loading="lazy" alt="Salón con mueble de obra blanco, butaca de bouclé y la alfombra Lyra Coconut Oat de Rols" data-lb="4"></figure>
+    </div>
+    <button class="sbtn next" type="button" data-snext aria-label="Foto siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
+  </div>
 
-  <!-- ===================== 2. TEXTO DEL PROYECTO (tras el hero) ===================== -->
-  <section class="wrap ftext rv">
-    <div class="in">
-      <p class="body">En este piso de <b>Tolosa, Guipúzcoa, proyectado por Natalia Marchal Interiorismo,</b> los espacios se resuelven a partir de una composición luminosa, donde los tonos claros, la madera y las fibras naturales se reparten el protagonismo. En cada estancia, una alfombra Rols aporta lo que el espacio necesita: calidez, color o un tejido resistente pensado para el uso diario.</p>
+  <!-- ===================== 3. DATOS | TEXTO ===================== -->
+  <section class="wrap datos rv">
+    <div class="lista">
+      <h1>Piso luminoso en Tolosa</h1>
+      <p><b>Fecha:</b> 2026</p>
+      <!-- Si el estudio no tiene red social, se quita el enlace .ig. -->
+      <p><b>Realizado por:</b> Natalia Marchal Interiorismo <a class="ig" href="https://www.instagram.com/nataliamarchal_interiorismo" target="_blank" rel="noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="1.4"></rect><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="1.4"></circle><circle cx="17.3" cy="6.7" r="1" fill="currentColor"></circle></svg>@nataliamarchal_interiorismo</a></p>
+      <p><b>Localización:</b> Tolosa, Guipúzcoa</p>
+      <p><b>Categoría:</b> Residencial</p>
+      <p><b>Alfombras:</b> <a href="https://www.rolscarpets.com/producto/lyra-alfombra-coconut-oat/">Lyra Coconut Oat</a></p>
+    </div>
+    <div class="texto">
+      <p>Natalia Marchal firma en Tolosa un piso lleno de luz, donde los tonos claros, la madera y las fibras naturales se reparten el protagonismo. En cada estancia de este proyecto de interiorismo, una alfombra Rols aporta lo que el espacio necesita.</p>
+      <p>En el salón, nuestra Lyra Coconut Oat aporta una base cálida y neutra bajo la zona de estar. Su tono da confort al ambiente y ayuda a reunir el sofá, la butaca y la mesa de centro en un mismo espacio.</p>
+      <p>La misma Lyra Coconut Oat se repite en la habitación infantil y en el dormitorio, en distintos formatos, y da continuidad a toda la vivienda. Texto de demostración para comprobar el diseño con un solo modelo.</p>
+      <p>Una sola alfombra que aporta calidez y personalidad a los espacios de este piso.</p>
     </div>
   </section>
 
-  <!-- ===================== 3. GALERÍA · pareja ===================== -->
-  <section class="wrap fgal rv">
-    <div class="pair split">
-      <figure><img src="img/natalia-marchal-006.webp" width="1076" height="1334" loading="lazy" alt="Salón con mueble de obra blanco y la alfombra Lyra Coconut Oat de Rols" data-lb="1"></figure>
-      <figure><img src="img/natalia-marchal-001.webp" width="1076" height="1334" loading="lazy" alt="Habitación infantil con la alfombra redonda Terra Kalahari Oat Sea de Rols" data-lb="2"><a class="fchip bl" href="https://www.rolscarpets.com/producto/terra-kalahari-alfombra-oat-sea/"><span class="thumb" style="background-image:url(img/terra-kalahari-oat-sea-tex.webp)"></span><span class="t"><span class="k">En la habitación</span><span class="n">Terra Kalahari Oat Sea</span></span></a></figure>
-    </div>
-  </section>
-
-  <!-- ===================== 4. TEXTO (izquierda, al margen de la imagen) ===================== -->
-  <section class="wrap fnote rv">
-    <p>Dentro de esta composición, la alfombra <b>Lyra Coconut Oat</b> define la zona de estar: su base cálida y neutra ordena el sofá, las butacas y la mesa de centro, y da una continuidad visual sobre la que se apoya todo el salón. Su tejido aporta una capa material que equilibra la madera clara y las fibras naturales del espacio.</p>
-  </section>
-
-  <!-- ===================== 5. BLOQUE EDITORIAL: foto ancha + banda cálida + foto cuadrada con texto ===================== -->
-  <section class="wrap feature rv">
-    <figure class="feat-wide"><img src="img/natalia-marchal-007.webp" width="1076" height="1334" loading="lazy" alt="Vista del salón desde el comedor, con la alfombra Lyra Coconut Oat de Rols" data-lb="3"></figure>
-    <div class="feat-warm">
-      <div class="feat-row">
-        <figure class="feat-sq"><img src="img/natalia-marchal-003.webp" width="1076" height="1334" loading="lazy" alt="Dormitorio en tonos tierra con la alfombra Aral 03 de Rols a los pies de la cama" data-lb="4"><a class="fchip" href="https://www.rolscarpets.com/producto/aral-alfombra-03/"><span class="thumb" style="background-image:url(img/aral-03-tex.webp)"></span><span class="t"><span class="k">En el dormitorio</span><span class="n">Aral 03</span></span></a></figure>
-        <div class="feat-txt">
-          <p>La luz que entra filtrada por las cortinas realza la textura de cada alfombra y revela sus variaciones tonales. Es en ese juego entre tejido, escala y luz <b>donde las piezas de Rols toman todo su protagonismo</b>: superficies que no solo acompañan la arquitectura interior, sino que amplían su calidez y su carácter atemporal.</p>
+  <!-- ===================== 4. ALFOMBRAS EN ESTE PROYECTO (slider) ===================== -->
+  <!-- Una alfombra por vista. Con un solo modelo, class="solo" en .rslider oculta la navegacion. -->
+  <section class="wrap rugs-sec rv" id="alfombras">
+    <div class="ruleHead"><p class="eyebrow">Alfombras en este proyecto</p><span class="rule"></span></div>
+    <div class="rslider solo" data-rslider>
+      <div class="rviewport">
+        <ul class="rtrack">
+        <li class="rslide">
+          <div class="sin">
+            <div class="ramb"><img src="img/natalia-marchal-006.webp" width="1076" height="1334" loading="lazy" alt="Salon con la alfombra Lyra Coconut Oat de Rols"></div>
+            <div class="rinfo">
+              <div class="rtop">
+                <div class="hd">
+                  <p class="w">Salón</p>
+                  <h3>Lyra Coconut Oat</h3>
+                </div>
+                <img class="sw" src="img/lyra-coconut-oat-tex.webp" loading="lazy" alt="Esquina de la alfombra Lyra Coconut Oat">
+              </div>
+              <p class="desc">Una base cálida y neutra bajo la zona de estar que reúne el sofá, la butaca y la mesa de centro.</p>
+              <ul class="rspecs">
+                <li><span class="k">Material</span><span class="v">PET reciclado</span></li>
+                <li><span class="k">Altura</span><span class="v">4 mm</span></li>
+                <li><span class="k">Ancho m&aacute;x.</span><span class="v">4 m</span></li>
+              </ul>
+              <div class="rfoot">
+                <a class="arrow" href="https://www.rolscarpets.com/producto/lyra-alfombra-coconut-oat/">Ver alfombra <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></a>
+              </div>
+            </div>
+          </div>
+        </li>
+        </ul>
+      </div>
+      <div class="rnav">
+        <span class="rcount"><b data-rcur>1</b> / <span data-rtotal>1</span></span>
+        <div class="rbtns">
+          <button type="button" data-rprev aria-label="Alfombra anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg></button>
+          <button type="button" data-rnext aria-label="Alfombra siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></button>
         </div>
       </div>
     </div>
   </section>
 
-
-  <!-- ===================== 4. ALFOMBRAS (fila de muestras) ===================== -->
-  <!-- Fila de muestras: textura a sangre + nombre + material + precio + «Añadir muestra». Se adapta a 1, 2, 3 o 4 modelos. -->
-  <section class="wrap frugs rv" id="alfombras">
-    <div class="ruleHead"><p class="eyebrow">Alfombras en este proyecto</p><span class="rule"></span></div>
-    <ul class="fswatches">
+  <!-- ===================== 5. OTROS PROYECTOS ===================== -->
+  <section class="wrap more rv">
+    <div class="ruleHead"><p class="eyebrow">Otros proyectos</p><span class="rule"></span></div>
+    <ul class="mgrid">
       <li>
-        <a class="fsw" href="https://www.rolscarpets.com/producto/lyra-alfombra-coconut-oat/">
-          <span class="im"><img src="img/lyra-coconut-oat-corner-w.webp" loading="lazy" alt="Esquina de la alfombra Lyra Coconut Oat de Rols"></span>
-          <span class="nm">Lyra Coconut Oat</span>
-          <span class="col">PET reciclado</span>
-          <span class="pr">Desde 400 €</span>
-          <span class="add">Añadir muestra <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></span>
+        <a class="mcard" href="https://www.rolscarpets.com/proyecto/sara-andueza-interiorismo-salon-calido-en-pamplona/">
+          <span class="mimg"><img src="img/otros-sara-andueza.webp" loading="lazy" alt="Salon calido en Pamplona, proyecto de Sara Andueza Interiorismo"></span>
+          <span class="k">Proyecto de</span>
+          <span class="nm">Sara Andueza Interiorismo</span>
+          <span class="sub">Salón cálido en Pamplona</span>
+        </a>
+      </li>
+      <li>
+        <a class="mcard" href="https://www.rolscarpets.com/proyecto/natalia-zubizarreta-vivienda-en-madrid/">
+          <span class="mimg"><img src="img/otros-natalia-zubizarreta-madrid.webp" loading="lazy" alt="Vivienda en Madrid, proyecto de Natalia Zubizarreta Interiorismo"></span>
+          <span class="k">Proyecto de</span>
+          <span class="nm">Natalia Zubizarreta Interiorismo</span>
+          <span class="sub">Vivienda en Madrid</span>
+        </a>
+      </li>
+      <li>
+        <a class="mcard" href="https://www.rolscarpets.com/proyecto/estudio-monica-diago-para-lumier-piso-en-calle-castello/">
+          <span class="mimg"><img src="img/otros-lumier-castello.webp" loading="lazy" alt="Piso en la calle Castello, proyecto de Estudio Monica Diago para Lumier"></span>
+          <span class="k">Proyecto de</span>
+          <span class="nm">Estudio Mónica Diago para Lumier</span>
+          <span class="sub">Piso en la calle Castelló</span>
         </a>
       </li>
     </ul>
-  </section>
-
-  <!-- ===================== 6. MAS PROYECTOS (anterior / siguiente) · miniatura ===================== -->
-  <section class="wrap fprojnav rv">
-    <div class="fpn-grid">
-      <a class="fpn prev" href="https://www.rolscarpets.com/proyecto/sara-andueza-interiorismo-salon-calido-en-pamplona/">
-        <img class="th" src="img/otros-sara-andueza.webp" width="610" height="764" loading="lazy" alt="">
-        <span class="txt">
-          <span class="k"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="15 6 9 12 15 18"></polyline></svg>Proyecto anterior</span>
-          <span class="nm">Sara Andueza Interiorismo</span>
-          <span class="sub">Salón cálido en Pamplona</span>
-        </span>
-      </a>
-      <a class="fpn next" href="https://www.rolscarpets.com/proyecto/natalia-zubizarreta-vivienda-en-madrid/">
-        <img class="th" src="img/otros-natalia-zubizarreta-madrid.webp" width="610" height="764" loading="lazy" alt="">
-        <span class="txt">
-          <span class="k">Proyecto siguiente<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></span>
-          <span class="nm">Natalia Zubizarreta Interiorismo</span>
-          <span class="sub">Vivienda en Madrid</span>
-        </span>
-      </a>
+    <div class="more-foot">
+      <a class="arrow" href="https://www.rolscarpets.com/proyectos-realizados/">Ver todos los proyectos <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><polyline points="9 6 15 12 9 18"></polyline></svg></a>
     </div>
   </section>
 
